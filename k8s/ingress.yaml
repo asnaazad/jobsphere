@@ -1,0 +1,52 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jobsphere-ingress
+  namespace: jobsphere
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+
+spec:
+  ingressClassName: nginx
+
+  rules:
+    - host: jobsphere.local
+
+      http:
+        paths:
+
+          # Frontend
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+
+          # Auth Service
+          - path: /api/auth(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 5001
+
+          # Job Service
+          - path: /api/jobs(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: job-service
+                port:
+                  number: 5000
+
+          # Application Service
+          - path: /api/applications(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: application-service
+                port:
+                  number: 5002

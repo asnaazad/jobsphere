@@ -1,0 +1,41 @@
+namespace: jobsphere
+
+mysql:
+  image: mysql:8.0
+  storage: 2Gi
+
+frontend:
+  image: jobsphere-frontend:v3
+  replicas: 1
+
+auth:
+  image: jobsphere-auth-service:v5
+  replicas: 1
+
+job:
+  image: jobsphere-job-service:v5
+  replicas: 1
+
+application:
+  image: jobsphere-application-service:v4
+  replicas: 1
+
+database:
+  name: jobsphere
+  user: jobsphereuser
+  password: jobpassword
+  rootPassword: rootpassword
+
+security:
+  jwtSecret: "jobsphere-super-secret-jwt-key-2026"
+
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "300m"
+    memory: "256Mi"
+
+ingress:
+  host: jobsphere.local
